@@ -108,7 +108,7 @@ end;
 %% Solucao do sistema (solver ODE45)
 %[Ngrp, g[..], Q_ji [..], Q_ij, M0]
 param = [Ngrupos, gj, Qji, Qij, M0j];
-[t, Bj] = ode45 ('re_tr_f', [0:h:tmax], CI, [], param);
+[t, Bj] = ode45 ('re_tr_f2', [0:h:tmax], CI, [], param);
 
 %% Resultados
 %% figure 1

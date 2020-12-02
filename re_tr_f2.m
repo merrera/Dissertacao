@@ -1,6 +1,6 @@
-%% re_tr_f.m
+%% re_tr_f2.m
 % Autor: Marcelo e Andre
-% Last modified: 23/11/2020
+% Last modified: 02/12/2020
 % Funcao para o codigo retrsim.m
 
 function dBdt = re_tr(t,Bi,flag,parm)
