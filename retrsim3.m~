@@ -27,7 +27,7 @@ Ntmax = tmax/h;
 % [B(t=0),tmax,h
 Bj = zeros (Ntmax, 1); % densidade relativa [ton/km2]
 %
-Bj(1) = 31.66 % Fitoplancton / densidade relativa [ton/km2] 
+Bj(1) = % Fitoplancton / densidade relativa [ton/km2] 
 CI = Bj(1);
 %% Parametros:
 % Taxa de crescimento por grupo [tonNB/tonB/ano]
@@ -42,26 +42,62 @@ CI = Bj(1);
 % Qij = 
 
 % % PBj  - produtividade do grupo (j) pela biomassa total tonP/tonB/ano
-PBj = 183; % fitoplacnton
 % PBj (1) = 1.5; % Hopmal J
-
 % % EEj - eficiencia ecotrofica do grupo (j)  ( 0 <= EE <= 1)
 EEj = 0.29; % Fitoplancton
+% EEj (1) = 0.723; % Hopmal J
+% EEj (2) = 0.138; % Hopmal A
+%
+% M0j  - mortalidade espontenea de biomassa do grupo (j) tonBM/tonB/ano 
+% for j = 1:Ngrupos,
+%      M0j (j) = PBj(j)*(1 - EEj(j))/Bj(j);  
+% end;
+%
+% coeficientes de crescimento de von Bertalanffi (VBGF)
+%k(1) = 0.15 % por ano para Hopmal J
+%k(2) = 0.15 % por ano para Hopmal A
+%
+%Linf (1) = 68.25; % comprimento total em cm Hopmal J
+%Linf (2) = 101.85; % comprimento total em cm Hopmal A
+%
+%Tc = 17; % temperatura media da agua em oC
+%
+% M0j  - mortalidade total do grupo (j) tonBM/tonB/ano 
+
+% for j = 1:Ngrupos,
+%     M0j (j) = (k(j)^0.65) * (Linf(j)^-0.279) * (Tc^0.463);
+% end;
 
 %% Solucao do sistema (solver ODE45)
 %[Ngrp, g[..], Q_ji [..], Q_ij, M0]
-param = [EEj PBj];
+param = [M0j];
 [t, Bj] = ode45 ('re_tr_f2', [0:h:tmax], CI, [], param);
 
 %% Resultados
 %% figure 1
 figure(1); clf;
-semilogy(t,Bj,'b-.');
-legend('fitoplancton');
+plot(t,Bj(:,1),'g-.', t,Bj(:,2),'r-');
+legend('Hopmal J','Hopmal A');
 title('Evolucao Temporal da Biomassa do Reservatorio','Fontsize',16)
 xlabel('Tempo [anos]','fontsize',14)
+ylabel('B [ton/km2]','fontsize',14)
 
 %% figure 2
+
+%% Espaco de Fase:
+% figure(4);
+% plot(N(:,1), Ninftotal); 
+% xmax = max ( N(:,1));
+% [Sc,i] = max( Ninftotal );
+% axis ( [ 0 1.25*xmax 0 1.25*Sc ] );
+% hold on;
+% plot( N(1,1),Ninftotal(1),'k*');
+% plot( N(end,1), Ninftotal(end),'ko');
+% plot( N(i,1), Sc, 'o');
+% title('SEIR - Espaco de Fase','Fontsize',16)
+% xlabel('Susceptiveis (S)','fontsize',14)
+% ylabel('Infectados Totais (E+I)','fontsize',14)
+% hold off;
 
 %output = [(0:tmax)',Iobs]; 
 %save('Iobs.txt',output','-ascii')
